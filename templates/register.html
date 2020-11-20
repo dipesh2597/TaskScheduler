@@ -18,9 +18,10 @@ padding: 5%; max-width: 500px;">
         </div>
     {% endfor %}
   {% endif %}
-
+<form method="POST" action="{% url 'register' %}">
     {% csrf_token %}
-    <div class="form-group">
+
+    <div class="form-group" >
         <div class="form-group">
             <div id="errorname" style="color:red"></div>
             <label for="name" class="requiredField">Name<span class="asteriskField">*</span> </label>
@@ -48,18 +49,18 @@ padding: 5%; max-width: 500px;">
         <div class="form-group">
             <div id="errorpass" style="color:red"></div>
             <label for="mobile" class="requiredField">Mobile Number<span class="asteriskField">*</span></label>
-            <input name="mobile-number" type="text" class="form-control" id="mobile" placeholder="Password" />
+            <input name="mobile" type="text" class="form-control" id="mobile" placeholder="Password" />
         </div>
         <div class="form-group">
             <div id="errorpass" style="color:red"></div>
             <label for="address" class="requiredField" onclick="getLocation()">Address<span class="asteriskField">*</span></label>
             <input name="address" type="text" class="form-control" id="address" placeholder="Password" />
-            <input id="latitude" / style="display:none;"> 
-            <input id="longitude" / style="display:none;">
+            <input id="latitude" name="latitude" style="display:none;" /> 
+            <input id="longitude" name="longitude" style="display:none;" />
         </div>
-    <button type="" class="btn btn-primary" onclick="register()">Register</button>
+    <button type="submit" class="btn btn-primary" >Register</button>
     </div> 
-
+</form>
 </div>
 <script>
     function getLocation() {
