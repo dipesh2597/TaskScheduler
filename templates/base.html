@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    {%load static %}
+<head>
+    <title>{% block title %}Task Scheduler{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    {%block stylesheet%}
+    {%endblock%}
+</head>
+    <body>
+        <nav class="navigation-container">
+            <div class="nav-content-1" style="margin: 10px 25px;">
+                <div class="logo-link">
+                    <a class="navbar-brand" href="">
+                        Logo
+                    </a>
+                </div>
+            </div>
+        </nav>
+    
+        <!--Main content coming from backend-->
+        <div class="main-body" >
+            <!-- <div class="main-body" > -->
+            {% if messages %}
+            <div class="row">
+              <div class="col-sm-8 center" style="margin-left: auto; margin-right: auto; margin-top: 1rem;">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  {{ message }}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

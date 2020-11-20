@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .form-popup {
+      display: none;
+      position: fixed;
+      right: 15px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+      padding: 10px;
+      top:150px;
+      background: white;
+    }
+    
+    /* Add styles to the form container */
+    .form-container {
+      max-width: 300px;
+      padding: 10px;
+      background-color: white;
+    }
+    
+    
+    .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+      background-color: #ddd;
+      outline: none;
+    }
+    
+    </style>
+<div class="form-popup" id="addTask">
+    <form method="POST" action="{% url 'task' %}">
+        {% csrf_token %}
+        <h1>Add Task</h1>
+  
+        <label for="name"><b>Task Name</b></label>
+        <input id="name" type="text" placeholder="Enter name" name="name" required>
+  
+        <label for="assigned_to"><b>Assign To</b></label>
+            <select name="assigned_to" id="assigned_to">
+                {% for user in users %}
+                    <option value="{{user.id}}">{{user}}</option>
+                {% endfor %}
+            </select>
+
+        <label for="date-time" class="form-field-label raleway-font capitalize">
+            Date
+        </label>
+        <input id="date-time" class="form-control" type="date" name="date"/>
+        <label for="time" class="form-field-label raleway-font capitalize">
+            Time
+        </label>
+        <input id="time" class="form-control" type="time" name="time"/>
+  
+        <button type="submit" class="btn">Add</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </form>
+  </div>
+<div style="display: flex;
+justify-content: space-between;
+padding: 2vw 5vw;"> 
+    <h5 style='margin-top: 15px'>My Tasks</h5>
+    <button style="border: 2px solid white;
+    border-radius: 25px;
+    background: linear-gradient(269deg,#0048ff,#0096ff);
+    color: white;
+    padding: 10px;" onclick="openForm()">Add task</button>
+    
+</div>
+<div style="padding: 2vw 5vw;"> 
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr style="background: linear-gradient(269deg,#0048ff,#0096ff);color:#ffffff">
+                <th>Task Name</th>
+                <th>Date </th>
+                <th>Time</th>
+                <th>Assigned by</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for task in tasks %}   
+            <tr>
+                <td>{{task.task_name}}</td>
+                <td>{{task.date_time.date}}</td>
+                <td>{{task.date_time.time}}</td>
+                <td>{{task.assigned_by}}</td>
+                <td>{{task.status}}</td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+  </table>
+</div>
+
+<script>
+    function openForm() {
+      document.getElementById("addTask").style.display = "block";
+    }
+    
+    function closeForm() {
+      document.getElementById("addTask").style.display = "none";
+    }
+    </script>
+
+{% endblock %}

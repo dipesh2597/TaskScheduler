@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="background-color: whitesmoke;
+z-index: -999;
+padding: 5%; max-width: 500px;">
+  <h2>Register</h2>
+  {% if form.errors %}
+  {% for field in form %}
+    {% for error in field.errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+  {% endif %}
+
+    {% csrf_token %}
+    <div class="form-group">
+        <div class="form-group">
+            <div id="errorname" style="color:red"></div>
+            <label for="name" class="requiredField">Name<span class="asteriskField">*</span> </label>
+            <div class="">
+                <input type="text" name="name" maxlength="32" class="form-control" id = "name" aria-describedby="emailHelp" placeholder="Enter Name">
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username" class="requiredField">Username<span class="asteriskField">*</span></label>
+          <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
+        </div>
+
+        <div class="form-group">
+            <div id="erroremail" style="color:red"></div>
+            <label for="email" class="requiredField">Email address<span class="asteriskField">*</span></label>
+            <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        
+        <div class="form-group">
+            <div id="errorpass" style="color:red"></div>
+            <label for="password" class="requiredField">Create Password<span class="asteriskField">*</span></label>
+            <input name="password" type="password" class="form-control" id="password" placeholder="Password" />
+        </div>
+        <div class="form-group">
+            <div id="errorpass" style="color:red"></div>
+            <label for="mobile" class="requiredField">Mobile Number<span class="asteriskField">*</span></label>
+            <input name="mobile-number" type="text" class="form-control" id="mobile" placeholder="Password" />
+        </div>
+        <div class="form-group">
+            <div id="errorpass" style="color:red"></div>
+            <label for="address" class="requiredField" onclick="getLocation()">Address<span class="asteriskField">*</span></label>
+            <input name="address" type="text" class="form-control" id="address" placeholder="Password" />
+            <input id="latitude" / style="display:none;"> 
+            <input id="longitude" / style="display:none;">
+        </div>
+    <button type="" class="btn btn-primary" onclick="register()">Register</button>
+    </div> 
+
+</div>
+<script>
+    function getLocation() {
+       if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(showPosition);
+       } else {
+         x.innerHTML = "Geolocation is not supported by this browser.";
+       }
+    }
+  
+    function showPosition(position) {
+            // fetching user's curretn location latitude and longitude value
+            let lat = position.coords.latitude;
+            let long = position.coords.longitude;
+
+            var la = document.getElementById("latitude")
+            var lo = document.getElementById("longitude")
+
+            //giving input to latitude and longitude value as i am not using paid google maps api so i'll be just fetching these values and storing into DB
+            la.value=lat
+            lo.value=long
+            
+            let url_str = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+long+'&key=AIzaSyDO8J8UyYlddRFLZbtfpo_ptbCBLHKsMgE'
+            $.getJSON(url_str, function(data) {
+                // Google maps asking for money so i am leaving it 
+                //here you get the location data, like street address, city and pass it to inputs and submit the form to save it.
+            });
+          }
+    
+    //calling function so that it can fetch address lat,log automatically
+    getLocation()
+
+    function register() {
+        email = document.getElementById("email").value;
+        name = document.getElementById("name").value;
+        username = document.getElementById("username").value;
+        password = document.getElementById("password").value;
+        mobile = document.getElementById("mobile").value;
+        address = document.getElementById("address").value;
+        latitude = document.getElementById("latitude").value;
+        longitude = document.getElementById("longitude").value;
+        console.log(latitude,longitude)
+        csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        $("#erroremail").html("");
+        $("#errorpass").html("");
+        $.ajax({
+        type:"POST",
+        url:'/register/',
+        data:{
+          'csrfmiddlewaretoken': csrfmiddlewaretoken,
+          'name':name,
+          'username':username,
+          'email':email,
+          'password':password,
+          'mobile':mobile,
+          'address':address,
+          'latitude':latitude,
+          'longitude':longitude,
+
+        },
+        success : function(data){
+            
+        }
+        })
+    }
+
+</script>
+{% endblock %}
